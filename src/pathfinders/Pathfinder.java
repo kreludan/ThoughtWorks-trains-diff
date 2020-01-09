@@ -25,12 +25,12 @@ public abstract class Pathfinder {
         return paths;
     }
 
-    public void clearPaths() {
+    private void clearPaths() {
         paths = new LinkedList<String>();
     }
 
 
-    public void recurse(String path, Character curr, Character dest, int amount, FindType type) {
+    private void recurse(String path, Character curr, Character dest, int amount, FindType type) {
         if (finished(path, curr, dest) && meetsConditions(path, amount, type)) {
             paths.add(path);
         }
@@ -48,10 +48,6 @@ public abstract class Pathfinder {
 
     }
 
-    public Graph getGraph() {
-        return graph;
-    }
-
     public int pathDistance(String path) {
         return graph.calcPathDistance(path);
     }
@@ -60,7 +56,7 @@ public abstract class Pathfinder {
         return path.length()-1;
     }
 
-    public boolean finished(String path, Character curr, Character dest) {
+    private boolean finished(String path, Character curr, Character dest) {
         if (curr.equals(dest) && path.length() > 1) {
             return true;
         }

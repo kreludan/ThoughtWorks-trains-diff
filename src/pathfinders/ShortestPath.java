@@ -29,11 +29,11 @@ public class ShortestPath {
         return distances.get(dest);
     }
 
-    public void clearDistances() {
+    private void clearDistances() {
         distances = new HashMap<Character, Integer>();
     }
 
-    public HashMap<Character, Integer> Dijkstra(Character source){
+    private HashMap<Character, Integer> Dijkstra(Character source){
         Set<Character> q = new HashSet<Character>();
 
         initializeDijkstra(source, q);
@@ -50,15 +50,26 @@ public class ShortestPath {
         return distances;
     }
 
-    public int smallestCycle(Character source){
-        Node sourceNode = vertices.get(source);
+    private int smallestCycle(Character sourceName){     // modified: no longer relies on "from" method calls
+        Node sourceNode = vertices.get(sourceName);
         int smallest = Integer.MAX_VALUE;
-        for (Character c : sourceNode.getKeysFrom()) {
-            if (sourceNode.getWeightFrom(c) == Integer.MAX_VALUE || distances.get(c) == Integer.MAX_VALUE){
+
+        for(Map.Entry<Character, Node> entry : vertices.entrySet()) {
+            Character neighborName = entry.getKey();
+            if (neighborName.equals(sourceName)) {
                 continue;
             }
-            int cycleDistance = sourceNode.getWeightFrom(c) + distances.get(c);
-            if(cycleDistance < smallest) {
+
+            Node neighborNode = entry.getValue();
+            int sourceToNeighbor = distances.get(neighborName);
+            int neighborToSource = neighborNode.getWeightTo(sourceName);
+
+            if (sourceToNeighbor == Integer.MAX_VALUE || neighborToSource == Integer.MAX_VALUE) {
+                continue;
+            }
+
+            int cycleDistance = sourceToNeighbor + neighborToSource;
+            if (cycleDistance < smallest) {
                 smallest = cycleDistance;
             }
         }
@@ -67,7 +78,7 @@ public class ShortestPath {
     }
 
 
-    public void initializeDijkstra(Character source, Set<Character> q) {
+    private void initializeDijkstra(Character source, Set<Character> q) {
         distances.put(source, 0);
         for (Character vertex : vertices.keySet()) {
             if (!vertex.equals(source)) distances.put(vertex, Integer.MAX_VALUE);
@@ -75,7 +86,7 @@ public class ShortestPath {
         }
     }
 
-    public void handleConnections(Character nodeName) {
+    private void handleConnections(Character nodeName) {
         Node currNode = vertices.get(nodeName);
 
         for(Character connection : currNode.getKeysTo()) {
@@ -87,7 +98,7 @@ public class ShortestPath {
         }
     }
 
-    public char minDistVertex(Set<Character> q) {
+    private char minDistVertex(Set<Character> q) {
 
         int minDistance = Integer.MAX_VALUE;
         Map.Entry<Character, Integer> minDistEntry = null;

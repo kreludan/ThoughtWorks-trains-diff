@@ -21,7 +21,7 @@ public class Graph{
         return vertices.get(c);
     }
 
-    public void addNode(Character name){
+    private void addNode(Character name){
         Node node = new Node(name);
         vertices.put(name, node);
     }
@@ -31,11 +31,9 @@ public class Graph{
         createVertexIfNeeded(to);
         Node f = getVertex(from);
         f.addConnectionTo(to, weight);
-        Node t = getVertex(to);
-        t.addConnectionFrom(from, weight);
     }
 
-    public void createVertexIfNeeded(Character c){
+    private void createVertexIfNeeded(Character c){
         if(!vertices.containsKey(c)){
             addNode(c);
         }
@@ -59,7 +57,7 @@ public class Graph{
         return distance;
     }
 
-    public int tryAddSegmentDistance(int distance, Character src, Character dst){
+    private int tryAddSegmentDistance(int distance, Character src, Character dst){
         Node source = vertices.get(src);
         int segDist = source.getWeightTo(dst);
         if(segDist == Integer.MAX_VALUE){
